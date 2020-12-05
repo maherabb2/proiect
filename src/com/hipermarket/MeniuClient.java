@@ -1,16 +1,18 @@
 package com.hipermarket;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class MeniuClient implements Meniu {
-     private ArrayList<Produs> cos;
+    private ArrayList<Produs> cos;
 
-     MeniuClient() {
-         cos = new ArrayList<>();
-     }
+    MeniuClient() {
+        cos = new ArrayList<>();
+    }
 
     @Override
     public void afisare() {
@@ -27,13 +29,16 @@ public class MeniuClient implements Meniu {
                 break;
             case '2':
                 finalizarePlata();
+                break;
             case '4':
                 totalPlata();
                 break;
             case '5':
                 stergeProdus();
+                break;
             case '6':
                 anulareCumparaturi();
+                break;
             case '8':
                 verificareCasier();
                 break;
@@ -95,7 +100,7 @@ public class MeniuClient implements Meniu {
             ex.printStackTrace();
         }
 
-        for (Produs produs: produse) {
+        for (Produs produs : produse) {
             if (produs.getId() == produsId) {
                 System.out.println("Am gasit un produs: " + produs.toString());
                 produs.setCantitate(produsCantitate);
@@ -115,22 +120,50 @@ public class MeniuClient implements Meniu {
     private void totalPlata() {
         System.out.println("Clientul a cerut totalul de plata");
         // Aici facem suma tututror produselor din cos
-        double suma=0;
-        for (Produs p:cos){
-           suma+=p.getPret()*p.getCantitate();
-        }try{FileWriter scrie=new FileWriter("database/output.txt");
-        scrie.write(String.valueOf(suma));
-        scrie.close();}catch (Exception ex){
+        double suma = 0;
+        for (Produs p : cos) {
+            suma += p.getPret() * p.getCantitate();
+        }
+        try {
+            FileWriter scrie = new FileWriter("database/output.txt");
+            scrie.write(String.valueOf(suma));
+            scrie.close();
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     private void stergeProdus() {
         System.out.println("Clientul a cerut stergerea unui produs");
+        File messages = new File("database/messages.txt");
 
-        
+        int id = 0;
+
+        try {
+            Scanner scanner = new Scanner(messages);
+            String valoare = scanner.nextLine();
+
+            id = Integer.parseInt(valoare);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        for (Iterator it = cos.iterator(); it.hasNext(); ) {
+            Produs p = (Produs) it.next();
+            if (p.getId() == id) {
+                it.remove();
+                try {
+                    FileWriter scrie = new FileWriter("database/output.txt");
+                    scrie.write(String.valueOf(true));
+                    scrie.close();
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+
+                }
+            }
+        }
     }
-
     private void anulareCumparaturi() {
             System.out.println("Clientul a cerut anularea cumparaturilor");
     }
