@@ -47,6 +47,7 @@ public class MeniuClient implements Meniu {
                 verificareAdmin();
                 break;
             case '0':
+                meniu = new MeniuPrincipal();
                 // Aici menu ar trebui sa aiba valloarea com.hipermarket.MeniuPrincipal
                 break;
             default:
@@ -176,7 +177,7 @@ public class MeniuClient implements Meniu {
     }
 
     private void anulareCumparaturi() {
-            System.out.println("Clientul a cerut anularea cumparaturilor");
+        System.out.println("Clientul a cerut anularea cumparaturilor");
     }
 
     private void finalizarePlata() {
@@ -265,5 +266,48 @@ valoare=Float.parseFloat(line);
 
     private void verificareAdmin() {
         System.out.println("Cautare si verificare admin");
+
+        String user = null, pass = null;
+
+        File messages = new File("database/messages.txt");
+        try {
+            Scanner scanner = new Scanner(messages);
+            String line = scanner.nextLine();
+
+
+            String[] elemente = line.split(";");
+            user = elemente[0];
+            pass = elemente[1];
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+
+
+        File fisierAdmin = new File("database/admin.txt");
+        try {
+            Scanner scanner = new Scanner(fisierAdmin);
+
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] elemente = line.split(";");
+
+                String u = elemente[0];
+                String p = elemente[1];
+
+                if (u.equals(user) && p.equals(pass)){
+                    try {
+                        FileWriter scrie = new FileWriter("database/output.txt");
+                        scrie.write(String.valueOf(true));
+                        scrie.close();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
 }
