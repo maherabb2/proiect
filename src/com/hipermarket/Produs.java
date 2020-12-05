@@ -4,7 +4,7 @@ public class Produs {
     private final int id;
     private final String nume;
     private final float pret;
-    private final float cantitate;
+    private  float cantitate;
     private final TipCantitate tipCantitate;
     private final CategorieProdus categorie;
 
@@ -39,6 +39,9 @@ public class Produs {
 
     public CategorieProdus getCategorie() {
         return categorie;
+    }
+    public void setCantitate(float cantitate){
+        this.cantitate=cantitate;
     }
 
     @Override

@@ -65,7 +65,6 @@ public class MeniuClient implements Meniu {
             String[] elemente = line.split(";");
             produsId = Integer.parseInt(elemente[0]);
             produsCantitate = Float.parseFloat(elemente[1]);
-
             System.out.println("Id-ul meu este: " + produsId);
             System.out.println("Cantintatea mea este: " + produsCantitate);
         } catch (Exception ex) {
@@ -99,6 +98,7 @@ public class MeniuClient implements Meniu {
         for (Produs produs: produse) {
             if (produs.getId() == produsId) {
                 System.out.println("Am gasit un produs: " + produs.toString());
+                produs.setCantitate(produsCantitate);
                 cos.add(produs);
 
                 try {
@@ -115,6 +115,14 @@ public class MeniuClient implements Meniu {
     private void totalPlata() {
         System.out.println("Clientul a cerut totalul de plata");
         // Aici facem suma tututror produselor din cos
+        double suma=0;
+        for (Produs p:cos){
+           suma+=p.getPret()*p.getCantitate();
+        }try{FileWriter scrie=new FileWriter("database/output.txt");
+        scrie.write(String.valueOf(suma));
+        scrie.close();}catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     private void stergeProdus() {
