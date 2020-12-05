@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 public class MeniuClient implements Meniu {
     private ArrayList<Produs> cos;
+    private double sumaTotala;
 
     MeniuClient() {
         cos = new ArrayList<>();
@@ -127,6 +128,7 @@ public class MeniuClient implements Meniu {
         try {
             FileWriter scrie = new FileWriter("database/output.txt");
             scrie.write(String.valueOf(suma));
+            sumaTotala=suma;
             scrie.close();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -164,12 +166,54 @@ public class MeniuClient implements Meniu {
             }
         }
     }
+
+    private float totalSuma(){
+        float suma=0;
+        for(Produs p:cos){
+            suma+=p.getPret()*p.getCantitate();
+        }
+        return suma;
+    }
+
     private void anulareCumparaturi() {
             System.out.println("Clientul a cerut anularea cumparaturilor");
     }
 
     private void finalizarePlata() {
         System.out.println("Clientul a cerut finalizare plata");
+
+        File mesaj=new File("database/messages.txt");
+        float valoare=0;
+        try{
+        Scanner scanner=new Scanner(mesaj);
+String line= scanner.nextLine();
+valoare=Float.parseFloat(line);
+        } catch(Exception ex) {
+            ex.getStackTrace();
+        }
+        sumaTotala-=valoare;
+        try {
+            File fisier=new File("database/output.txt");
+            FileWriter write=new FileWriter(fisier);
+            write.write(String.valueOf(sumaTotala));
+            write.close();
+        }catch(Exception ex){
+            ex.getStackTrace();
+        }
+        if(sumaTotala<=0){
+            try {
+            File fisier=new File("database/vanzari.txt");
+            FileWriter write= new FileWriter(fisier,true);
+            write.append(String.valueOf(totalSuma())+"\n");
+                cos.removeAll(cos);
+            write.close();
+        }catch(Exception ex){
+                ex.getStackTrace();
+            }
+        }
+
+
+
     }
 
     private void verificareCasier() {
