@@ -14,6 +14,9 @@ public class MeniuAdmin extends MeniuAngajat {
             case '1':
                 adauga();
                 break;
+            case '3':
+                listare();
+                break;
         }
 
         return this;
@@ -99,7 +102,35 @@ public class MeniuAdmin extends MeniuAngajat {
 
     @Override
     public void listare() {
+        File file = new File("database/casieri.txt");
+        ArrayList<Casier> casiers = new ArrayList<>();
+        try{
+            Scanner scanner = new Scanner(file);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String []elemente = line.split(";");
 
+                String username = elemente[0];
+                String parola = elemente[1];
+
+                Casier casier = new Casier(username, parola);
+                casiers.add(casier);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        try {
+            FileWriter writer = new FileWriter("database/output.txt");
+            for (Casier c : casiers) {
+                writer.write(c.toString());
+
+            }
+            writer.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
