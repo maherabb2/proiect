@@ -178,6 +178,15 @@ public class MeniuClient implements Meniu {
 
     private void anulareCumparaturi() {
         System.out.println("Clientul a cerut anularea cumparaturilor");
+        cos.clear();
+        try{
+            File fisier=new File("database/output.txt");
+            FileWriter write=new FileWriter(fisier);
+            write.write(String.valueOf(true));
+            write.close();
+        }catch(Exception ex){
+            ex.getStackTrace();
+        }
     }
 
     private void finalizarePlata() {
