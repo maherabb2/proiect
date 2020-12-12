@@ -3,6 +3,7 @@ package com.hipermarket;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class MeniuAdmin extends MeniuAngajat {
@@ -16,6 +17,9 @@ public class MeniuAdmin extends MeniuAngajat {
                 break;
             case '3':
                 listare();
+                break;
+            case '2':
+                sterge();
                 break;
         }
 
@@ -135,6 +139,58 @@ public class MeniuAdmin extends MeniuAngajat {
 
     @Override
     public void sterge() {
+        File file = new File("database/casieri.txt");
+        ArrayList<Casier> casiers = new ArrayList<>();
+        try{
+            Scanner scanner = new Scanner(file);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String []elemente = line.split(";");
+
+                String username = elemente[0];
+                String parola = elemente[1];
+
+                Casier casier = new Casier(username, parola);
+                casiers.add(casier);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        try{
+            File fisier=new File("database/messages.txt");
+            Scanner scanner=new Scanner(fisier);
+            String line= scanner.nextLine();
+            boolean rezultat=false;
+            for(Iterator it=casiers.iterator();it.hasNext();){
+                Casier c=(Casier)it.next();
+                if(c.getUser().equals(line)){
+                    it.remove();
+                    rezultat=true;
+                    break;
+                }
+            }
+
+            File fisier1=new File("database/output.txt");
+            FileWriter scrie=new FileWriter(fisier1);
+            scrie.write(String.valueOf(rezultat));
+            scrie.close();
+
+            File casieri=new File("database/casieri.txt");
+            FileWriter scrieCasieri=new FileWriter(casieri);
+            for(Casier c:casiers){
+            scrieCasieri.write(c.toString());
+            }
+            scrieCasieri.close();
+        }catch(Exception ex){
+            ex.getStackTrace();
+        }
+
+
+
+
+
 
     }
 
