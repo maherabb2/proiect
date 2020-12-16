@@ -61,6 +61,6 @@ public class Produs {
 
     @Override
     public String toString() {
-        return String.valueOf(id) + ";" + nume + ";" + pret + ";" + cantitate + ";" + tipCantitate.ordinal() + ";" + categorie.ordinal();
+        return String.valueOf(id) + ";" + nume + ";" + pret + ";" + cantitate + ";" + tipCantitate.ordinal() + ";" + categorie.ordinal() + "\n";
     }
 }
