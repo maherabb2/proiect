@@ -21,9 +21,19 @@ public class MeniuAdmin extends MeniuAngajat {
             case '2':
                 sterge();
                 break;
+            case '4':
+                totalVanzari();
+                break;
+            case'8':
+                verificareCasier();
+                break;
+            case '0':
+                meniu = new MeniuPrincipal();
+            default:
+                System.out.println("Optiune invalida!");
         }
 
-        return this;
+        return meniu;
     }
 
     @Override
@@ -70,25 +80,27 @@ public class MeniuAdmin extends MeniuAngajat {
                 Casier c = new Casier(user, pass);
                 casieri.add(c);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         boolean rezutat = false;
-        for (Casier c: casieri) {
+        for (Casier c : casieri) {
             System.out.println("Casier: " + c.toString());
-            if (! c.equals(casier)) {
+            if (!c.equals(casier)) {
                 System.out.println("Casierul nu exista");
                 rezutat = true;
+                break;
+            }
+        }
 
-                try {
-                    FileWriter writer = new FileWriter(casieriFile, true);
-                    writer.write(casier.toString());
-                    writer.close();
-                }catch (Exception e) {
-                    e.printStackTrace();
-                }
+        if (rezutat == true) {
+            try {
+                FileWriter writer = new FileWriter(casieriFile, true);
+                writer.write(casier.toString());
+                writer.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
@@ -186,15 +198,75 @@ public class MeniuAdmin extends MeniuAngajat {
         }catch(Exception ex){
             ex.getStackTrace();
         }
+    }
 
+    private void totalVanzari() {
+        File vanzari = new File("database/vanzari.txt");
 
+        double total = 0;
 
+        try {
+            Scanner scanner = new Scanner(vanzari);
+            while (scanner.hasNextLine()) {
+                double value = Double.parseDouble(scanner.nextLine());
+                total += value;
+            }
 
+            FileWriter writer = new FileWriter("database/output.txt");
+            writer.write(String.valueOf(total));
+            writer.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
     }
 
     private void verificareCasier() {
+        System.out.println("Cautare si verificare casier");
+
+        String user = null, pass = null;
+
+        File messages = new File("database/messages.txt");
+        try {
+            Scanner scanner = new Scanner(messages);
+            String line = scanner.nextLine();
+
+
+            String[] elemente = line.split(";");
+            user = elemente[0];
+            pass = elemente[1];
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+
+
+        File fisierProduse = new File("database/casieri.txt");
+        try {
+            Scanner scanner = new Scanner(fisierProduse);
+
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] elemente = line.split(";");
+
+                String u = elemente[0];
+                String p = elemente[1];
+
+                if (u.equals(user) && p.equals(pass)){
+                    try {
+                        FileWriter scrie = new FileWriter("database/output.txt");
+                        scrie.write(String.valueOf(true));
+                        scrie.close();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
     }
 }

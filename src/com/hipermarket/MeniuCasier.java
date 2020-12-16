@@ -26,8 +26,12 @@ public class MeniuCasier extends MeniuAngajat {
                 sterge();
             case '9':
                 verificareAdmin();
+                break;
             case '0':
                 menu = new MeniuPrincipal();
+                break;
+            default:
+                System.out.println("Optiune invalida!");
         }
         return menu;
     }
